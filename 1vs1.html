@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penalty Quiz Showdown | MonoCode Architect</title>
+    <style>
+        :root {
+            --primary: #22c55e;
+            --primary-dark: #16a34a;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --error: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Screens */
+        .screen { display: none; animation: fadeIn 0.4s ease-out; }
+        .screen.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* UI Elements */
+        .card {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--primary); }
+        p { color: var(--text-dim); margin-bottom: 2rem; }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+
+        /* Scoreboard */
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        .score-box { display: flex; flex-direction: column; }
+        .score-val { font-size: 2rem; color: var(--primary); }
+
+        /* Quiz Styles */
+        .options-grid { display: grid; gap: 10px; margin-top: 20px; }
+        .option-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+        }
+        .option-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* Penalty Field */
+        .field {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(to bottom, #166534, #14532d);
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid rgba(255,255,255,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+
+        .goal {
+            position: absolute;
+            top: 20px;
+            width: 160px;
+            height: 80px;
+            border: 4px solid white;
+            border-bottom: none;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .target {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .target:hover { background: var(--primary); transform: scale(1.1); }
+
+        /* Ball & Goalkeeper placeholders */
+        .ball {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 20px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card);
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 100;
+            border: 1px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast">¡Mensaje!</div>
+
+    <div id="app">
+        <div id="screen-start" class="screen active">
+            <div class="card">
+                <h1>PENALTY QUIZ</h1>
+                <p>Demuestra que sabes de fútbol para ganar el derecho a patear. ¡Primero a 5 goles gana!</p>
+                <button class="btn" onclick="startGame()">Jugar 1vs1 Local</button>
+            </div>
+        </div>
+
+        <div id="screen-quiz" class="screen">
+            <div class="scoreboard">
+                <div class="score-box"><span>Local</span><span class="score-val" id="score-p1">0</span></div>
+                <div class="score-box"><span>Visitante</span><span class="score-val" id="score-p2">0</span></div>
+            </div>
+            <div class="card">
+                <h3 id="player-turn-label" style="margin-bottom: 10px; color: var(--primary);">Turno de Jugador 1</h3>
+                <h2 id="question-text">¿Quién ganó el mundial de 2022?</h2>
+                <div id="options" class="options-grid"></div>
+            </div>
+        </div>
+
+        <div id="screen-penalty" class="screen">
+            <div class="card">
+                <h2 id="penalty-title">¡TIRO LIBRE!</h2>
+                <p id="penalty-desc">Elige dónde patear</p>
+                
+                <div class="field">
+                    <div class="goal">
+                        <div class="target" onclick="chooseDirection(0)">L</div>
+                        <div class="target" onclick="chooseDirection(1)">C</div>
+                        <div class="target" onclick="chooseDirection(2)">R</div>
+                    </div>
+                    <div id="ball" class="ball"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-gameover" class="screen">
+            <div class="card">
+                <h1 id="winner-text">¡JUGADOR 1 GANÓ!</h1>
+                <button class="btn" onclick="location.reload()">Jugar de nuevo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "¿Qué país ha ganado más Copas del Mundo?", a: ["Brasil", "Alemania", "Italia", "Argentina"], c: 0 },
+            { q: "¿En qué club debutó Lionel Messi?", a: ["PSG", "Newell's", "FC Barcelona", "Man. City"], c: 2 },
+            { q: "¿Quién es el máximo goleador de la historia de los Mundiales?", a: ["Pelé", "Klose", "Ronaldo", "Mbappé"], c: 1 },
+            { q: "¿A qué selección le apodan 'La Roja'?", a: ["Chile", "España", "Ambas son correctas", "Portugal"], c: 2 },
+            { q: "¿Cuántos Balones de Oro tiene Cristiano Ronaldo?", a: ["3", "4", "5", "6"], c: 2 },
+            { q: "¿En qué país se jugó el primer Mundial (1930)?", a: ["Brasil", "Uruguay", "Francia", "Argentina"], c: 1 }
+        ];
+
+        let gameState = {
+            scores: [0, 0],
+            currentPlayer: 0, // 0 o 1
+            currentQuestion: null,
+            mode: 'quiz', // 'quiz' o 'penalty'
+            penaltyAction: 'shoot' // 'shoot' o 'save'
+        };
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2500);
+        }
+
+        function switchScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function startGame() {
+            gameState.scores = [0, 0];
+            updateScoreUI();
+            nextTurn();
+        }
+
+        function updateScoreUI() {
+            document.getElementById('score-p1').innerText = gameState.scores[0];
+            document.getElementById('score-p2').innerText = gameState.scores[1];
+        }
+
+        function nextTurn() {
+            if (gameState.scores[0] >= 5 || gameState.scores[1] >= 5) {
+                endGame();
+                return;
+            }
+
+            gameState.currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+            const label = document.getElementById('player-turn-label');
+            label.innerText = `Turno de: Jugador ${gameState.currentPlayer + 1}`;
+            
+            document.getElementById('question-text').innerText = gameState.currentQuestion.q;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            gameState.currentQuestion.a.forEach((opt, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx);
+                optionsDiv.appendChild(btn);
+            });
+            
+            switchScreen('screen-quiz');
+        }
+
+        function checkAnswer(idx) {
+            if (idx === gameState.currentQuestion.c) {
+                showToast("¡Correcto! Tienes un penal.");
+                startPenaltyStage('shoot');
+            } else {
+                showToast("¡Incorrecto! Pierdes el turno.");
+                gameState.currentPlayer = gameState.currentPlayer === 0 ? 1 : 0;
+                setTimeout(nextTurn, 1500);
+            }
+        }
+
+        function startPenaltyStage(action) {
+            gameState.mode = 'penalty';
+            const title = document.getElementById('penalty-title');
+            const desc = document.getElementById('penalty-desc');
+            const ball = document.getElementById('ball');
+            
+            ball.style.transform = 'translate(0, 0)';
+            title.innerText = `¡JUGADOR ${gameState.currentPlayer + 1} PATEA!`;
+            desc.innerText = "Elige una dirección para disparar";
+            
+            switchScreen('screen-penalty');
+        }
+
+        function chooseDirection(dir) {
+            const ball = document.getElementById('ball');
+            const goalieDir = Math.floor(Math.random() * 3); // IA Atajando (Simulando oponente)
+            
+            // Animación de la pelota
+            const xMove = (dir - 1) * 60;
+            ball.style.transform = `translate(${xMove}px, -130px) scale(0.5)`;
+
+            setTimeout(() => {
+                if (dir === goalieDir) {
+                    showToast("¡ATAJADÓN!");
+                } else {
+                    showToast("¡GOOOOOL!");
+                    gameState.scores[gameState.currentPlayer]++;
+                    updateScoreUI();
+                }
+
+                setTimeout(() => {
+                    gameState.currentPlayer = gameState.currentPlayer === 0 ? 1 : 0;
+                    nextTurn();
+                }, 1500);
+            }, 600);
+        }
+
+        function endGame() {
+            const winner = gameState.scores[0] >= 5 ? "JUGADOR 1" : "JUGADOR 2";
+            document.getElementById('winner-text').innerText = `¡${winner} ES EL CAMPEÓN!`;
+            switchScreen('screen-gameover');
+        }
+    </script>
+</body>
+</html>
