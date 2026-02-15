@@ -3,93 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bzn Fut | Champions Edition v15</title>
+    <title>Bzn Fut | Pure Competition v16</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1; --accent: #00f2ff; --bg: #050507; --card-bg: rgba(20, 20, 25, 0.95);
-            --border: rgba(255, 255, 255, 0.15); --text: #ffffff;
-            --success: #10b981; --danger: #ef4444; --gold: #fbbf24;
+            --primary: #4f46e5;
+            --accent: #00f2ff;
+            --bg: #050507;
+            --surface: #121216;
+            --text: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gold: #fbbf24;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rajdhani', sans-serif; -webkit-tap-highlight-color: transparent; user-select: none; }
         
         body { 
             background-color: var(--bg); color: var(--text); height: 100dvh; display: flex; justify-content: center; overflow: hidden;
-            background: radial-gradient(circle at 50% 0%, #1e1b4b, #000);
+            background: radial-gradient(circle at 50% 0%, #171720, #000);
         }
 
         #app { width: 100%; max-width: 480px; height: 100%; display: flex; flex-direction: column; position: relative; padding: 15px; }
 
-        /* ANIMATIONS */
+        /* SCREENS */
         .screen { display: none; flex-direction: column; height: 100%; animation: fade 0.3s ease-out; }
         .screen.active { display: flex; }
         @keyframes fade { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
-        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
 
-        /* UI ELEMENTS */
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--border); }
+        /* UI KIT */
+        .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; margin-bottom: 15px; backdrop-filter: blur(10px); }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
         
-        .btn { width: 100%; padding: 16px; border-radius: 14px; border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: white; position: relative; overflow: hidden; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; color: white; margin-bottom: 8px; position: relative; overflow: hidden; }
         .btn:active { transform: scale(0.98); }
-        .btn-primary { background: linear-gradient(90deg, var(--primary), #4f46e5); box-shadow: 0 0 15px rgba(99, 102, 241, 0.3); }
-        .btn-glass { background: rgba(255,255,255,0.08); border: 1px solid var(--border); }
-        .btn-libertadores { background: linear-gradient(90deg, #f59e0b, #b45309); color: black; font-weight: 900; }
-        .btn-survival { background: linear-gradient(90deg, #ef4444, #991b1b); }
+        .btn-primary { background: linear-gradient(90deg, var(--primary), #6366f1); box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
+        .btn-glass { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-success { background: var(--success); color: #000; }
 
-        /* GAMEPLAY UI */
-        .scoreboard { display: flex; justify-content: space-between; align-items: center; background: #000; padding: 10px; border-radius: 16px; border: 1px solid #333; margin-bottom: 10px; }
-        .score-box { text-align: center; width: 45%; }
-        .dots-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; }
-        .dot { width: 8px; height: 8px; background: #222; border-radius: 50%; transition: 0.3s; }
-        .dot.active { background: var(--accent); box-shadow: 0 0 8px var(--accent); transform: scale(1.2); }
+        /* GAME UI */
+        .scoreboard { background: #000; padding: 10px; border-radius: 16px; border: 1px solid #333; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .score-row { display: flex; justify-content: space-between; align-items: center; }
+        .p-name { font-size: 0.8rem; color: #888; width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .dots-container { display: flex; gap: 3px; flex: 1; justify-content: flex-end; }
+        .dot { width: 8px; height: 8px; background: #222; border-radius: 50%; border: 1px solid #333; transition: 0.3s; }
+        .dot.active { background: var(--accent); box-shadow: 0 0 5px var(--accent); border-color: var(--accent); transform: scale(1.2); }
 
-        .timer-bar { width: 100%; height: 4px; background: #222; margin-bottom: 10px; }
+        .hist-badge { text-align: center; font-size: 0.75rem; color: var(--gold); margin-bottom: 5px; background: rgba(251, 191, 36, 0.1); padding: 2px 10px; border-radius: 10px; align-self: center; border: 1px solid rgba(251, 191, 36, 0.2); }
+
+        .timer-bar { width: 100%; height: 4px; background: #222; margin-bottom: 10px; border-radius: 2px; }
         .timer-fill { height: 100%; background: var(--primary); transition: width 0.2s linear; }
         .timer-fill.danger { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
 
-        .q-box { min-height: 100px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 1.1rem; font-weight: 700; padding: 10px; line-height: 1.3; }
-        .opt-btn { width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: #ddd; text-align: left; margin-bottom: 6px; font-weight: 600; font-size: 0.95rem; }
+        .q-box { min-height: 110px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 1.2rem; font-weight: 700; padding: 10px; line-height: 1.3; }
+        .opt-btn { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #ddd; text-align: left; margin-bottom: 6px; font-weight: 600; font-size: 1rem; transition: 0.2s; }
         .opt-btn:active { background: var(--accent); color: #000; }
+        .opt-btn:disabled { opacity: 0.3; }
+        .opt-btn.hint { border: 1px solid var(--success); background: rgba(16, 185, 129, 0.2); }
 
-        /* TAUNTS & ITEMS */
-        .taunt-bar { display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; }
-        .taunt-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #444; background: #111; font-size: 1.2rem; cursor: pointer; }
+        /* TAUNTS */
+        .taunt-bar { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; }
+        .taunt-btn { width: 45px; height: 45px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; font-size: 1.5rem; cursor: pointer; transition: 0.2s; }
         .taunt-btn:active { transform: scale(0.9); border-color: var(--accent); }
 
-        .items-dock { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding-top: 10px; border-top: 1px solid var(--border); }
+        .floating-taunt { position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%) scale(0); font-size: 4rem; z-index: 500; animation: popUp 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; pointer-events: none; text-shadow: 0 0 20px black; }
+        @keyframes popUp { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; } 80% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -80%) scale(1.5); opacity: 0; } }
+
+        /* ITEMS */
+        .items-dock { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
         .item-btn { background: #111; border: 1px solid #333; border-radius: 10px; padding: 8px; text-align: center; font-size: 0.7rem; position: relative; color: #888; }
         .item-btn b { display: block; color: var(--gold); font-size: 0.9rem; margin-top: 2px; }
+        .badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; width: 18px; height: 18px; border-radius: 50%; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
 
-        /* PENALTY MINIGAME MODAL */
-        .penalty-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 500; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .penalty-track { width: 90%; height: 30px; background: #333; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #555; }
-        .penalty-zone { width: 20%; height: 100%; background: var(--success); position: absolute; left: 40%; }
-        .penalty-cursor { width: 10px; height: 100%; background: white; position: absolute; left: 0; box-shadow: 0 0 10px white; }
-        .penalty-msg { font-size: 2rem; font-weight: 900; margin-bottom: 20px; color: var(--accent); text-transform: uppercase; }
+        /* MODALS */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-box { background: #111; border: 1px solid var(--primary); padding: 30px; border-radius: 20px; text-align: center; width: 100%; max-width: 350px; box-shadow: 0 0 30px rgba(79, 70, 229, 0.3); }
 
-        /* HEATMAP & STATS */
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.8rem; }
-        .progress-bg { width: 100%; height: 6px; background: #222; border-radius: 3px; }
-        .progress-fill { height: 100%; background: var(--primary); border-radius: 3px; }
-
-        /* WEATHER EFFECTS */
-        #weather-layer { position: absolute; inset: 0; pointer-events: none; z-index: 50; display: none; background: rgba(0,0,0,0.3); }
-        .rain { background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='); background-size: 2px 20px; animation: rain 0.5s linear infinite; opacity: 0.3; }
-        @keyframes rain { 0% {background-position: 0 0;} 100% {background-position: 5px 20px;} }
-
-        /* TOAST */
-        #toast { position: fixed; top: 100px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 8px 24px; border-radius: 30px; font-weight: 800; z-index: 600; box-shadow: 0 0 15px var(--accent); display: none; }
+        #toast { position: fixed; top: 100px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 8px 24px; border-radius: 30px; font-weight: 800; z-index: 200; box-shadow: 0 0 15px var(--accent); display: none; white-space: nowrap; }
     </style>
 </head>
 <body>
 
 <div id="toast">MSG</div>
-<div id="weather-layer"></div>
+<div id="taunt-layer"></div>
 
 <div id="app">
+
     <!-- MENU -->
     <div id="screen-menu" class="screen active">
         <div class="top-bar">
@@ -97,20 +97,20 @@
             <div style="color:var(--gold);">🪙 <span id="u-coins">0</span></div>
         </div>
         <div class="card" style="text-align:center;">
-            <h1 style="font-size:2.5rem; color:var(--text); letter-spacing:-1px;">BZN FUT</h1>
-            <small style="color:var(--accent); letter-spacing:2px;">CHAMPIONS v15</small>
+            <h1 style="font-size:3rem; margin-bottom:5px;">BZN FUT</h1>
+            <small style="color:var(--accent); letter-spacing:2px;">PURE COMPETITION v16</small>
         </div>
         <div style="display:flex; flex-direction:column; gap:5px;">
             <button class="btn btn-primary" onclick="goToOnline()">⚔️ ONLINE HUB</button>
-            <button class="btn btn-libertadores" onclick="startLibertadores()">🏆 LIBERTADORES</button>
-            <button class="btn btn-survival" onclick="startSurvival()">💀 SURVIVAL</button>
+            <button class="btn btn-glass" onclick="startLibertadores()">🏆 LIBERTADORES</button>
             <button class="btn btn-glass" onclick="startGame('bot')">🤖 VS BOT</button>
-            <button class="btn btn-glass" onclick="setScreen('screen-profile')">📊 PERFIL Y STATS</button>
+            <button class="btn btn-glass" onclick="startSurvival()">💀 SURVIVAL</button>
             <button class="btn btn-glass" onclick="setScreen('screen-shop')">🛒 MERCADO</button>
+            <button class="btn btn-glass" onclick="setScreen('screen-settings')">⚙️ AJUSTES</button>
         </div>
     </div>
 
-    <!-- ONLINE -->
+    <!-- ONLINE HUB -->
     <div id="screen-online" class="screen">
         <div class="top-bar"><span onclick="setScreen('screen-menu')">‹ MENU</span> <span>ONLINE</span></div>
         <div class="card">
@@ -121,9 +121,9 @@
         <div id="friend-list-container" style="flex:1; overflow-y:auto;"></div>
     </div>
 
-    <!-- HOST/JOIN -->
+    <!-- HOST / JOIN -->
     <div id="screen-host" class="screen" style="text-align:center; justify-content:center;">
-        <h3 style="color:#888;">TU SALA</h3>
+        <h3 style="color:#888;">TU CÓDIGO</h3>
         <h1 id="host-id-disp" style="font-size:3rem; color:var(--accent); margin:20px 0;">...</h1>
         <button class="btn btn-glass" onclick="location.reload()">CANCELAR</button>
     </div>
@@ -131,70 +131,58 @@
     <div id="screen-join" class="screen">
         <div class="top-bar"><span onclick="setScreen('screen-online')">‹ VOLVER</span></div>
         <div class="card">
-            <input id="join-input" style="width:100%; padding:20px; background:#000; border:1px solid #333; color:white; font-size:1.5rem; text-align:center; border-radius:12px;" placeholder="ID SALA">
+            <input id="join-input" style="width:100%; padding:20px; background:#000; border:1px solid #333; color:white; font-size:1.5rem; text-align:center; border-radius:12px; text-transform:uppercase;" placeholder="ID SALA">
             <button class="btn btn-primary" style="margin-top:10px;" onclick="connectToPeer()">CONECTAR</button>
         </div>
     </div>
 
     <!-- JUEGO -->
     <div id="screen-game" class="screen">
-        <div class="top-bar">
-            <span id="game-mode-display">1VS1</span>
-            <div id="event-indicator" style="color:var(--danger); font-weight:bold; display:none;">⚠️ EVENTO</div>
+        <div style="display:flex; justify-content:center;">
+            <div class="hist-badge" id="hist-disp">HISTORIAL: 0 - 0</div>
         </div>
 
         <div class="scoreboard">
-            <div class="score-box">
+            <div class="score-row">
                 <span class="p-name">YO</span>
-                <div class="dots-row" id="dots-me"></div>
+                <div class="dots-container" id="dots-me"></div>
             </div>
-            <div style="font-weight:900;">VS</div>
-            <div class="score-box">
+            <div style="height:1px; background:#222; margin:5px 0;"></div>
+            <div class="score-row">
                 <span class="p-name" id="rival-name">RIVAL</span>
-                <div class="dots-row" id="dots-op"></div>
+                <div class="dots-container" id="dots-op"></div>
             </div>
         </div>
 
         <div class="timer-bar"><div class="timer-fill" id="timer-bar"></div></div>
 
         <div class="taunt-bar">
-            <button class="taunt-btn" onclick="sendTaunt('whistle')">😗</button>
-            <button class="taunt-btn" onclick="sendTaunt('boo')">👎</button>
-            <button class="taunt-btn" onclick="sendTaunt('goal')">⚽</button>
-            <button class="taunt-btn" onclick="sendTaunt('clown')">🤡</button>
+            <button class="taunt-btn" onclick="sendTaunt('👻')">👻</button>
+            <button class="taunt-btn" onclick="sendTaunt('🤡')">🤡</button>
+            <button class="taunt-btn" onclick="sendTaunt('🤫')">🤫</button>
+            <button class="taunt-btn" onclick="sendTaunt('🥶')">🥶</button>
         </div>
 
         <div class="card q-box" id="q-text">...</div>
         <div id="options-area" style="display:flex; flex-direction:column;"></div>
 
+        <button id="btn-add-friend" class="btn btn-success" style="display:none; padding:10px; font-size:0.8rem; margin-top:5px;" onclick="sendFriendRequest()">+ AGREGAR A AMIGOS</button>
+
         <div class="items-dock">
-            <div class="item-btn" onclick="useItem('var')">📺 VAR <b id="b-var">0</b></div>
-            <div class="item-btn" onclick="useItem('hint')">📣 HINCHADA <b id="b-hint">0</b></div>
-            <div class="item-btn" onclick="useItem('time')">⏳ EXTRA <b id="b-time">0</b></div>
+            <div class="item-btn" onclick="useItem('var')">📺 VAR <div class="badge" id="b-var">0</div></div>
+            <div class="item-btn" onclick="useItem('hint')">📣 HINCHADA <div class="badge" id="b-hint">0</div></div>
+            <div class="item-btn" onclick="useItem('time')">⏳ EXTRA <div class="badge" id="b-time">0</div></div>
         </div>
     </div>
 
-    <!-- PERFIL / STATS -->
-    <div id="screen-profile" class="screen">
-        <div class="top-bar"><span onclick="setScreen('screen-menu')">‹ VOLVER</span></div>
-        <div class="card">
-            <h3>HEATMAP (Rendimiento)</h3>
-            <div style="margin-top:15px;">
-                <div class="stat-row"><span>ARGENTINA</span> <span id="stat-arg-txt">0%</span></div>
-                <div class="progress-bg"><div class="progress-fill" id="stat-arg-bar" style="width:0%"></div></div>
-            </div>
-            <div style="margin-top:15px;">
-                <div class="stat-row"><span>MUNDIAL</span> <span id="stat-world-txt">0%</span></div>
-                <div class="progress-bg"><div class="progress-fill" id="stat-world-bar" style="width:0%"></div></div>
-            </div>
-            <div style="margin-top:15px;">
-                <div class="stat-row"><span>SURVIVAL RECORD</span> <span id="stat-surv" style="color:var(--gold)">0</span></div>
-            </div>
-        </div>
-        <div class="card">
-            <p>NOMBRE</p>
-            <input id="inp-name" style="width:100%; padding:10px; background:#000; border:1px solid #333; color:white;" onchange="saveData()">
-            <button class="btn btn-glass" style="margin-top:10px;" onclick="resetData()">BORRAR DATOS</button>
+    <!-- MODAL FIN -->
+    <div id="modal-end" class="modal">
+        <div class="modal-box">
+            <h1 id="end-title" style="font-size:3rem; margin-bottom:10px;">FIN</h1>
+            <p id="end-msg" style="color:#888; margin-bottom:20px;">...</p>
+            <button class="btn btn-primary" onclick="reqRematch()">🔄 PEDIR REVANCHA</button>
+            <button class="btn btn-glass" onclick="quitGame()">SALIR AL MENU</button>
+            <p id="rematch-status" style="color:var(--accent); margin-top:10px; display:none;">Esperando...</p>
         </div>
     </div>
 
@@ -202,72 +190,82 @@
     <div id="screen-shop" class="screen">
         <div class="top-bar"><span onclick="setScreen('screen-menu')">‹ VOLVER</span></div>
         <div class="card">
-            <div style="display:flex; justify-content:space-between; padding:10px;">
-                <span>📺 VAR</span> <button class="btn btn-glass" style="width:auto; padding:5px 15px;" onclick="buyItem('var', 50)">$50</button>
-            </div>
-            <div style="display:flex; justify-content:space-between; padding:10px;">
-                <span>📣 HINCHADA</span> <button class="btn btn-glass" style="width:auto; padding:5px 15px;" onclick="buyItem('hint', 40)">$40</button>
-            </div>
-            <div style="display:flex; justify-content:space-between; padding:10px;">
-                <span>⏳ EXTRA</span> <button class="btn btn-glass" style="width:auto; padding:5px 15px;" onclick="buyItem('time', 30)">$30</button>
-            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px;"><span>📺 VAR</span> <button class="btn btn-glass" style="width:auto; padding:5px 15px;" onclick="buyItem('var', 50)">$50</button></div>
+            <div style="display:flex; justify-content:space-between; padding:10px;"><span>📣 HINCHADA</span> <button class="btn btn-glass" style="width:auto; padding:5px 15px;" onclick="buyItem('hint', 40)">$40</button></div>
+            <div style="display:flex; justify-content:space-between; padding:10px;"><span>⏳ EXTRA</span> <button class="btn btn-glass" style="width:auto; padding:5px 15px;" onclick="buyItem('time', 30)">$30</button></div>
         </div>
     </div>
 
-    <!-- PENALTY MINIGAME -->
-    <div id="modal-penalty" class="penalty-modal">
-        <div class="penalty-msg">¡PENAL!</div>
-        <div class="penalty-track">
-            <div class="penalty-zone"></div>
-            <div class="penalty-cursor" id="p-cursor"></div>
+    <!-- SETTINGS -->
+    <div id="screen-settings" class="screen">
+        <div class="top-bar"><span onclick="setScreen('screen-menu')">‹ VOLVER</span></div>
+        <div class="card">
+            <p>NOMBRE</p>
+            <input id="inp-name" style="width:100%; padding:15px; background:#000; border:1px solid #333; color:white; border-radius:10px; margin-bottom:10px;">
+            <button class="btn btn-primary" onclick="saveData()">GUARDAR</button>
+            <button class="btn btn-glass" style="margin-top:20px; color:var(--danger); border-color:var(--danger);" onclick="resetData()">BORRAR TODO</button>
         </div>
-        <p style="color:#aaa; margin-top:20px;">Toca para patear</p>
-        <button class="btn btn-primary" style="margin-top:20px; width:200px;" onmousedown="shootPenalty()" ontouchstart="shootPenalty()">PATEAR</button>
     </div>
 
-    <!-- FIN MODAL -->
-    <div id="modal-end" class="penalty-modal" style="background:rgba(0,0,0,0.95);">
-        <h1 id="end-title" style="font-size:3rem; margin-bottom:10px;">FIN</h1>
-        <p id="end-msg" style="color:#888;">...</p>
-        <button class="btn btn-primary" style="margin-top:20px;" onclick="quitGame()">CONTINUAR</button>
+    <!-- MODAL AMISTAD -->
+    <div id="modal-friend" class="modal">
+        <div class="modal-box">
+            <h3>SOLICITUD</h3>
+            <p id="friend-req-name" style="color:var(--primary); font-size:1.5rem; margin:10px 0;">...</p>
+            <button class="btn btn-success" onclick="acceptFriend()">ACEPTAR</button>
+            <button class="btn btn-glass" onclick="document.getElementById('modal-friend').style.display='none'">RECHAZAR</button>
+        </div>
     </div>
 
 </div>
 
 <script>
-    // --- DATABASE (Cat: 1=Arg, 2=World) ---
+    // --- DATABASE (ID unico para evitar repeticion) ---
     const DB = [
-        {c:1, q:"¿Club actual de Julián Álvarez?", a:["Atlético Madrid", "Man. City", "River", "Barcelona"], ok:0},
-        {c:2, q:"¿Club actual de Mbappé?", a:["Real Madrid", "PSG", "Monaco", "Liverpool"], ok:0},
-        {c:1, q:"¿Campeón Libertadores 2024?", a:["Botafogo", "Atl. Mineiro", "River", "Flamengo"], ok:0},
-        {c:2, q:"¿Campeón Eurocopa 2024?", a:["España", "Inglaterra", "Francia", "Alemania"], ok:0},
-        {c:1, q:"¿Quién es el Dibu?", a:["Martínez", "Armani", "Romero", "Andrada"], ok:0},
-        {c:1, q:"¿Estadio de Boca Juniors?", a:["Bombonera", "Monumental", "Cilindro", "Quemero"], ok:0},
-        {c:2, q:"¿Máximo ganador de Champions?", a:["Real Madrid", "Milan", "Bayern", "Liverpool"], ok:0},
-        {c:1, q:"¿Apodo de River Plate?", a:["Millonario", "Xeneize", "Canalla", "Lobo"], ok:0},
-        {c:2, q:"¿Dónde juega Haaland?", a:["Man. City", "Dortmund", "Leeds", "Bayern"], ok:0},
-        {c:1, q:"¿DT de Argentina 2024?", a:["Scaloni", "Bielsa", "Sampaoli", "Martino"], ok:0}
+        {id:1, q:"¿Club actual de Julián Álvarez?", a:["Atlético Madrid", "Man. City", "River", "Barcelona"], c:0},
+        {id:2, q:"¿Club actual de Mbappé?", a:["Real Madrid", "PSG", "Monaco", "Liverpool"], c:0},
+        {id:3, q:"¿Campeón Libertadores 2024?", a:["Botafogo", "Atl. Mineiro", "River", "Peñarol"], c:0},
+        {id:4, q:"¿Campeón Eurocopa 2024?", a:["España", "Inglaterra", "Francia", "Alemania"], c:0},
+        {id:5, q:"¿Dónde juega Enzo Fernández?", a:["Chelsea", "Benfica", "Real Madrid", "Liverpool"], c:0},
+        {id:6, q:"¿Campeón Copa América 2024?", a:["Argentina", "Colombia", "Uruguay", "Brasil"], c:0},
+        {id:7, q:"¿Dónde juega Mac Allister?", a:["Liverpool", "Brighton", "Juventus", "Boca"], c:0},
+        {id:8, q:"¿DT de Selección Argentina?", a:["Scaloni", "Sampaoli", "Martino", "Bielsa"], c:0},
+        {id:9, q:"¿Quién ganó Qatar 2022?", a:["Argentina", "Francia", "Croacia", "Marruecos"], c:0},
+        {id:10, q:"¿Club del Dibu Martínez?", a:["Aston Villa", "Arsenal", "West Ham", "Everton"], c:0},
+        {id:11, q:"¿Campeón Champions 2024?", a:["Real Madrid", "Dortmund", "Bayern", "Man. City"], c:0},
+        {id:12, q:"¿Apodo Selección Española?", a:["La Roja", "La Furia", "Los Toros", "Azul"], c:0},
+        {id:13, q:"¿Sede Final Mundial 2026?", a:["MetLife (USA)", "Azteca", "Toronto", "Rose Bowl"], c:0},
+        {id:14, q:"¿Equipo de Messi 2025?", a:["Inter Miami", "Barcelona", "Newell's", "PSG"], c:0},
+        {id:15, q:"¿Champions del Real Madrid?", a:["15", "14", "13", "16"], c:0},
+        {id:16, q:"¿Campeón Sudamericana 2024?", a:["Racing", "Cruzeiro", "Lanús", "Corinthians"], c:0},
+        {id:17, q:"¿Apodo Selección Brasil?", a:["Canarinha", "Verdeamarela", "Scratch", "Todas"], c:3},
+        {id:18, q:"¿Club de Lautaro Martínez?", a:["Inter", "Racing", "Atlético", "Barcelona"], c:0},
+        {id:19, q:"¿Campeón Mundial 1986?", a:["Argentina", "Alemania", "Brasil", "Italia"], c:0},
+        {id:20, q:"¿Dorsal de Lamine Yamal?", a:["19", "10", "27", "7"], c:0}
     ];
 
     // --- STATE ---
-    let db = JSON.parse(localStorage.getItem('bzn_fut_v15')) || {
-        name: 'Jugador', coins: 100, items: {var:3, hint:3, time:3}, friends: [],
-        stats: {arg:{ok:0, t:0}, world:{ok:0, t:0}, surv:0}
+    let db = JSON.parse(localStorage.getItem('bzn_fut_v16')) || {
+        name: 'Jugador', coins: 100, items: {var:3, hint:3, time:3}, 
+        friends: [], history: {} // {id: {w:0, l:0}}
     };
 
     let state = {
-        mode: null, myG:0, opG:0, timer:null, timeLeft:20, 
-        penAnim:null, penDir:1, penPos:0,
-        libRound:0, survScore:0, opStreak:0
+        mode: null, myG:0, opG:0, timer:null, timeLeft:20,
+        rival: {id:null, name:'BOT'}, usedQ: [], 
+        rematchMe: false, rematchOp: false, pendingFriend: null,
+        libRound: 0, survScore: 0
     };
-    let peer, conn, audioCtx;
+
+    let peer, conn;
 
     // --- INIT ---
     window.onload = () => {
+        if(db.name !== 'Jugador') setScreen('screen-menu'); else setScreen('screen-settings');
         updateUI();
-        setScreen('screen-menu');
     };
 
+    // --- UTILS ---
     function setScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -281,53 +279,92 @@
         document.getElementById('b-hint').innerText = db.items.hint;
         document.getElementById('b-time').innerText = db.items.time;
         document.getElementById('inp-name').value = db.name;
-        
-        // Heatmap Calc
-        const calc = (s) => s.t===0 ? 0 : Math.round((s.ok/s.t)*100);
-        const pA = calc(db.stats.arg);
-        const pW = calc(db.stats.world);
-        document.getElementById('stat-arg-txt').innerText = pA + '%';
-        document.getElementById('stat-arg-bar').style.width = pA + '%';
-        document.getElementById('stat-world-txt').innerText = pW + '%';
-        document.getElementById('stat-world-bar').style.width = pW + '%';
-        document.getElementById('stat-surv').innerText = db.stats.surv;
     }
 
     function saveData() { 
         db.name = document.getElementById('inp-name').value;
-        localStorage.setItem('bzn_fut_v15', JSON.stringify(db)); 
+        localStorage.setItem('bzn_fut_v16', JSON.stringify(db)); 
         updateUI(); 
     }
     
-    function resetData() { localStorage.removeItem('bzn_fut_v15'); location.reload(); }
+    function resetData() { localStorage.removeItem('bzn_fut_v16'); location.reload(); }
+    function toast(m) { const t=document.getElementById('toast'); t.innerText=m; t.style.display='block'; setTimeout(()=>t.style.display='none', 1500); }
 
-    function toast(m) {
-        const t = document.getElementById('toast');
-        t.innerText = m; t.style.display = 'block'; setTimeout(()=>t.style.display='none', 1500);
+    // --- ONLINE ---
+    function goToOnline() { setScreen('screen-online'); renderFriends(); }
+    function createRoom() {
+        setScreen('screen-host');
+        const code = 'BZN-'+Math.floor(Math.random()*9999);
+        document.getElementById('host-id-disp').innerText = code;
+        peer = new Peer(code);
+        peer.on('connection', c => { conn = c; setupConn('HOST'); });
+    }
+    function connectToPeer(tid) {
+        const id = tid || document.getElementById('join-input').value.toUpperCase();
+        if(!id) return toast("Falta ID");
+        peer = new Peer();
+        peer.on('open', () => { conn = peer.connect(id); setupConn('CLIENT'); });
+    }
+    function setupConn(role) {
+        conn.on('open', () => { conn.send({type:'hello', name:db.name, id:peer.id}); });
+        conn.on('data', d => {
+            if(d.type==='hello') {
+                state.rival = {id:d.id, name:d.name};
+                if(role==='HOST') conn.send({type:'hello', name:db.name, id:peer.id});
+                
+                const isFriend = db.friends.find(f => f.id === d.id);
+                document.getElementById('btn-add-friend').style.display = isFriend ? 'none' : 'block';
+                startGame('online');
+            }
+            if(d.type==='goal') handleOpGoal();
+            if(d.type==='rematch') { state.rematchOp=true; checkRematch(); }
+            if(d.type==='taunt') showTaunt(d.emoji);
+            if(d.type==='req_friend') {
+                state.pendingFriend = {id:d.id, name:d.name};
+                document.getElementById('friend-req-name').innerText = d.name;
+                document.getElementById('modal-friend').style.display='flex';
+            }
+            if(d.type==='acc_friend') {
+                if(!db.friends.find(f=>f.id===d.id)) { db.friends.push({id:d.id, name:d.name}); saveData(); toast(d.name+" aceptó!"); }
+            }
+        });
     }
 
-    // --- MODES ---
+    // --- FRIENDS ---
+    function sendFriendRequest() { conn.send({type:'req_friend', id:peer.id, name:db.name}); toast("Enviado"); document.getElementById('btn-add-friend').style.display='none'; }
+    function acceptFriend() {
+        if(!db.friends.find(f=>f.id===state.pendingFriend.id)) { db.friends.push(state.pendingFriend); saveData(); }
+        conn.send({type:'acc_friend', id:peer.id, name:db.name});
+        document.getElementById('modal-friend').style.display='none';
+    }
+    function renderFriends() {
+        const c = document.getElementById('friend-list-container'); c.innerHTML='';
+        if(db.friends.length===0) c.innerHTML='<p style="text-align:center; color:#666">Sin amigos</p>';
+        db.friends.forEach(f => {
+            const d = document.createElement('div'); d.className='friend-item';
+            d.innerHTML=`<div style="padding:10px; background:#111; margin-bottom:5px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+                <b>${f.name}</b> <button class="btn-glass" style="width:auto; padding:5px 10px;" onclick="connectToPeer('${f.id}')">JUGAR</button>
+            </div>`;
+            c.appendChild(d);
+        });
+    }
+
+    // --- GAME ---
     function startGame(mode) {
-        state.mode = mode; state.myG = 0; state.opG = 0; state.opStreak = 0;
-        document.getElementById('game-mode-display').innerText = mode.toUpperCase();
-        document.getElementById('event-indicator').style.display = 'none';
-        document.getElementById('weather-layer').style.display = 'none';
+        state.mode = mode; state.myG = 0; state.opG = 0; state.rematchMe=false; state.rematchOp=false; state.usedQ = [];
+        
+        if(mode !== 'online') state.rival = {id:null, name:'BOT'};
+        if(mode === 'libertadores') { state.libRound = 1; document.getElementById('rival-name').innerText = "OCTAVOS"; }
+        else if(mode === 'survival') { state.survScore = 0; document.getElementById('rival-name').innerText = "SURVIVAL"; }
+        else document.getElementById('rival-name').innerText = state.rival.name;
 
-        if(mode === 'survival') state.survScore = 0;
-        if(mode === 'libertadores') state.libRound = 0;
+        // Historial
+        if(state.rival.id) {
+            const h = db.history[state.rival.id] || {w:0, l:0};
+            document.getElementById('hist-disp').innerText = `HISTORIAL: ${h.w} - ${h.l}`;
+        } else document.getElementById('hist-disp').innerText = "";
 
-        setScreen('screen-game');
-        updateScore();
-        nextQ();
-    }
-
-    function startSurvival() { startGame('survival'); }
-    
-    function startLibertadores() {
-        state.libRound = 1; // 1:Oct, 2:Cuartos, 3:Semi, 4:Final
-        state.mode = 'libertadores';
-        state.myG = 0; state.opG = 0;
-        document.getElementById('game-mode-display').innerText = "OCTAVOS DE FINAL";
+        document.getElementById('modal-end').style.display = 'none';
         setScreen('screen-game');
         updateScore();
         nextQ();
@@ -336,227 +373,111 @@
     function nextQ() {
         clearInterval(state.timer);
         state.timeLeft = 20;
-        
-        // Event Check (Anti-Streak)
-        if(state.opStreak >= 3) triggerEvent();
-        else {
-            document.getElementById('event-indicator').style.display = 'none';
-            document.getElementById('weather-layer').style.display = 'none';
-        }
-
         startTimer();
 
-        const q = DB[Math.floor(Math.random()*DB.length)];
-        // Track stats cat
-        state.currQCat = q.c; 
+        let available = DB.filter(q => !state.usedQ.includes(q.id));
+        if(available.length===0) { state.usedQ=[]; available=DB; }
+        const q = available[Math.floor(Math.random()*available.length)];
+        state.usedQ.push(q.id);
 
         document.getElementById('q-text').innerText = q.q;
         const area = document.getElementById('options-area'); area.innerHTML = '';
         
         let idx = [0,1,2,3].sort(()=>Math.random()-0.5);
         idx.forEach(i => {
-            const b = document.createElement('button'); b.className = 'opt-btn';
-            b.innerText = q.a[i]; b.dataset.correct = (i === q.ok);
-            b.onclick = () => answer(i === q.ok);
-            area.appendChild(b);
+            const btn = document.createElement('button'); btn.className='opt-btn';
+            btn.innerText = q.a[i]; btn.dataset.correct = (i === q.c);
+            btn.onclick = () => answer(i === q.c);
+            area.appendChild(btn);
         });
-    }
-
-    function triggerEvent() {
-        state.opStreak = 0;
-        const type = Math.random();
-        if(type < 0.33) {
-            toast("¡LLUVIA TORRENCIAL!");
-            document.getElementById('weather-layer').className = 'rain';
-            document.getElementById('weather-layer').style.display = 'block';
-        } else if(type < 0.66) {
-            toast("¡VIENTO EN CONTRA! (-Tiempo)");
-            state.timeLeft = 10;
-        } else {
-            toast("¡PRESIÓN HINCHADA!");
-            document.getElementById('app').style.animation = 'shake 0.5s';
-            setTimeout(()=>document.getElementById('app').style.animation='', 500);
-        }
-        document.getElementById('event-indicator').style.display = 'block';
     }
 
     function startTimer() {
         const b = document.getElementById('timer-bar'); b.className='timer-fill';
-        state.timer = setInterval(() => {
-            state.timeLeft--;
-            b.style.width = (state.timeLeft/20*100)+'%';
+        state.timer = setInterval(()=>{
+            state.timeLeft--; b.style.width=(state.timeLeft/20*100)+'%';
             if(state.timeLeft<=0) { clearInterval(state.timer); punish(); }
         }, 1000);
     }
 
     function answer(ok) {
         clearInterval(state.timer);
-        // Stats
-        if(state.currQCat === 1) { db.stats.arg.t++; if(ok) db.stats.arg.ok++; }
-        if(state.currQCat === 2) { db.stats.world.t++; if(ok) db.stats.world.ok++; }
-        saveData();
-
         if(ok) {
-            if(state.mode === 'survival') {
-                state.survScore++;
-                toast("¡BIEN! SCORE: " + state.survScore);
-                setTimeout(nextQ, 1000);
-            } else {
-                openPenalty(); // MINIGAME TRIGGER
-            }
+            state.myG++; toast("¡GOL!"); db.coins+=5;
+            if(state.mode==='online' && conn) conn.send({type:'goal'});
+            if(state.mode==='survival') { state.survScore++; setTimeout(nextQ,1000); return; }
         } else {
-            if(state.mode === 'survival') {
-                gameOver(false);
-            } else {
-                punish();
-            }
+            toast("¡FALLASTE!");
+            if(state.mode==='survival') { gameOver(false); return; }
+            punish(); return; 
         }
-    }
-
-    // --- PENALTY MINIGAME ---
-    function openPenalty() {
-        document.getElementById('modal-penalty').style.display = 'flex';
-        state.penPos = 0; state.penDir = 1;
-        
-        // Animation Loop
-        const loop = () => {
-            state.penPos += (2 * state.penDir); // Speed
-            if(state.penPos > 90) state.penDir = -1;
-            if(state.penPos < 0) state.penDir = 1;
-            document.getElementById('p-cursor').style.left = state.penPos + '%';
-            state.penAnim = requestAnimationFrame(loop);
-        };
-        loop();
-    }
-
-    function shootPenalty() {
-        cancelAnimationFrame(state.penAnim);
-        document.getElementById('modal-penalty').style.display = 'none';
-        
-        // Zone check (40% to 60% is green)
-        if(state.penPos >= 40 && state.penPos <= 60) {
-            state.myG++;
-            toast("¡GOLAZO!");
-            if(state.mode === 'online' && conn) conn.send({type:'goal'});
-        } else {
-            toast("¡LA TIRASTE AFUERA!");
-        }
-        updateScore();
-        checkEnd();
+        saveData(); updateScore(); checkEnd();
+        if(!isEnd()) setTimeout(nextQ, 1000);
     }
 
     function punish() {
-        toast("FALLASTE");
-        if(state.myG > 0) state.myG--; else state.opG++;
-        
-        // Bot Logic: Bot might streak
-        if(state.mode !== 'online') {
-            if(Math.random() > 0.5) state.opStreak++; else state.opStreak=0;
-        }
-
-        updateScore();
-        checkEnd();
+        if(state.myG>0) state.myG--; else state.opG++;
+        updateScore(); checkEnd();
+        if(!isEnd()) setTimeout(nextQ, 1000);
     }
+
+    function handleOpGoal() { state.opG++; updateScore(); checkEnd(); }
 
     function updateScore() {
         drawDots(state.myG, 'dots-me'); drawDots(state.opG, 'dots-op');
-        if(!isEnd() && document.getElementById('modal-penalty').style.display === 'none') setTimeout(nextQ, 1000);
     }
-    
     function drawDots(n, id) {
         const el = document.getElementById(id); el.innerHTML='';
-        for(let i=0;i<5;i++) el.innerHTML += `<div class="dot ${i<n?'active':''}"></div>`;
+        for(let i=0;i<10;i++) el.innerHTML += `<div class="dot ${i<n?'active':''}"></div>`;
     }
-    
-    function isEnd() { return state.myG>=5 || state.opG>=5; }
 
-    function checkEnd() {
-        if(state.myG>=5) gameOver(true); else if(state.opG>=5) gameOver(false);
-    }
+    function isEnd() { return state.myG>=10 || state.opG>=10; }
+    function checkEnd() { if(state.myG>=10) gameOver(true); else if(state.opG>=10) gameOver(false); }
 
     function gameOver(win) {
-        if(state.mode === 'survival') {
-             // Save record
-             if(state.survScore > db.stats.surv) db.stats.surv = state.survScore;
-             showEndModal("GAME OVER", "Récord: " + state.survScore);
-             return;
-        }
-
-        if(state.mode === 'libertadores') {
-            if(win) {
-                state.libRound++;
-                if(state.libRound > 4) { showEndModal("¡CAMPEÓN DE AMÉRICA!", "La Gloria Eterna"); state.libRound=0; }
-                else {
-                    let rNames = ["", "OCTAVOS", "CUARTOS", "SEMIFINAL", "FINAL"];
-                    alert("GANASTE! PASAS A " + rNames[state.libRound]);
-                    state.myG=0; state.opG=0;
-                    document.getElementById('game-mode-display').innerText = rNames[state.libRound];
-                    updateScore();
-                    nextQ();
-                }
-            } else {
-                showEndModal("ELIMINADO", "Vuelve a intentar");
-            }
-            return;
-        }
-
-        showEndModal(win ? "VICTORIA" : "DERROTA", win ? "+50 Monedas" : "Sigue entrenando");
+        clearInterval(state.timer);
+        const m = document.getElementById('modal-end'); m.style.display='flex';
+        document.getElementById('end-title').innerText = win ? "VICTORIA" : "DERROTA";
+        document.getElementById('end-msg').innerText = win ? "+50 Monedas" : "Sigue intentando";
+        
         if(win) db.coins += 50;
+        if(state.rival.id) {
+            if(!db.history[state.rival.id]) db.history[state.rival.id] = {w:0, l:0};
+            if(win) db.history[state.rival.id].w++; else db.history[state.rival.id].l++;
+        }
         saveData();
     }
 
-    function showEndModal(t, m) {
-        document.getElementById('modal-end').style.display = 'flex';
-        document.getElementById('end-title').innerText = t;
-        document.getElementById('end-msg').innerText = m;
+    // --- REVANCHA / TAUNTS / ITEMS ---
+    function reqRematch() {
+        state.rematchMe=true; document.getElementById('rematch-status').style.display='block';
+        if(state.mode==='bot') setTimeout(()=>startGame('bot'), 1500);
+        else if(conn) conn.send({type:'rematch'});
+        checkRematch();
     }
-
-    function quitGame() {
-        clearInterval(state.timer);
-        document.getElementById('modal-end').style.display = 'none';
-        setScreen('screen-menu');
-    }
-
-    // --- AUDIO / TAUNTS ---
-    function sendTaunt(t) {
-        // Local sound
-        playSound(t);
-        // Send
-        if(state.mode === 'online' && conn) conn.send({type:'taunt', s:t});
-    }
-
-    function playSound(type) {
-        if(!window.AudioContext) return;
-        if(!audioCtx) audioCtx = new window.AudioContext();
-        const osc = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        osc.connect(g); g.connect(audioCtx.destination);
-        
-        const now = audioCtx.currentTime;
-        if(type==='whistle') { osc.frequency.setValueAtTime(3000, now); osc.frequency.linearRampToValueAtTime(2000, now+0.1); osc.start(); osc.stop(now+0.5); }
-        if(type==='boo') { osc.type='sawtooth'; osc.frequency.setValueAtTime(100, now); osc.frequency.linearRampToValueAtTime(50, now+1); osc.start(); osc.stop(now+1); }
-        if(type==='goal') { osc.type='square'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(600, now+0.2); osc.start(); osc.stop(now+0.6); }
-        if(type==='clown') { osc.type='triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.linearRampToValueAtTime(100, now+0.3); osc.start(); osc.stop(now+0.3); }
-    }
-
-    // --- ONLINE & ITEMS ---
-    function goToOnline() { setScreen('screen-online'); renderFriends(); }
-    function createRoom() { setScreen('screen-host'); const c='BZN-'+Math.floor(Math.random()*9999); document.getElementById('host-id-disp').innerText=c; peer=new Peer(c); peer.on('connection', c=>{conn=c; setupConn();}); }
-    function connectToPeer() { const id=document.getElementById('join-input').value; if(!id)return; peer=new Peer(); peer.on('open', ()=>{conn=peer.connect(id); setupConn();}); }
+    function checkRematch() { if(state.rematchMe && state.rematchOp) startGame('online'); }
     
-    function setupConn() {
-        conn.on('open', ()=>{conn.send({type:'hello', name:db.name});});
-        conn.on('data', d=>{
-            if(d.type==='hello') { state.rival={name:d.name}; startGame('online'); }
-            if(d.type==='goal') handleOpGoal();
-            if(d.type==='taunt') { toast("RIVAL: " + d.s); playSound(d.s); }
-        });
+    function sendTaunt(e) { if(conn) conn.send({type:'taunt', emoji:e}); showTaunt(e); }
+    function showTaunt(e) {
+        const d = document.createElement('div'); d.innerText=e; d.className='floating-taunt';
+        document.getElementById('taunt-layer').appendChild(d);
+        setTimeout(()=>d.remove(), 2000);
     }
 
-    function renderFriends() { /* Placeholder for friend logic from prev versions */ }
-    
-    function buyItem(t,c) { if(db.coins>=c){db.coins-=c; db.items[t]++; saveData(); toast("COMPRADO");} else toast("FALTA DINERO"); }
-    function useItem(t) { if(db.items[t]>0){ db.items[t]--; saveData(); updateUI(); if(t==='time') {clearInterval(state.timer); state.timeLeft=20; startTimer();} else toast("USADO"); } }
+    function buyItem(t,c){ if(db.coins>=c){db.coins-=c; db.items[t]++; saveData(); toast("COMPRADO");} else toast("Falta dinero"); }
+    function useItem(t) {
+        if(db.items[t]>0){
+            db.items[t]--; saveData(); updateUI();
+            const btns = document.querySelectorAll('.opt-btn');
+            if(t==='var') { let h=0; btns.forEach(b=>{ if(b.dataset.correct==='false' && h<2){b.disabled=true; b.style.opacity=0.2; h++} }); }
+            if(t==='hint') btns.forEach(b=>{ if(b.dataset.correct==='true') b.classList.add('hint'); });
+            if(t==='time') { clearInterval(state.timer); state.timeLeft=20; startTimer(); }
+        } else toast("Sin items");
+    }
+
+    function startLibertadores() { startGame('libertadores'); /* Simplified for robustness */ }
+    function startSurvival() { startGame('survival'); }
+    function quitGame() { clearInterval(state.timer); setScreen('screen-menu'); document.getElementById('modal-end').style.display='none'; }
 
 </script>
 </body>
